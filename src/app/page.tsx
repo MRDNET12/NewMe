@@ -145,10 +145,10 @@ export default function GlowUpChallengeApp() {
               <Globe className="w-12 h-12 text-rose-500 dark:text-rose-300" />
             </div>
             <h1 className="text-4xl font-bold bg-gradient-to-r from-rose-500 via-pink-500 to-orange-400 bg-clip-text text-transparent">
-              {language === 'fr' ? 'Bienvenue' : language === 'en' ? 'Welcome' : 'Bienvenida'}
+              {t.languageSelection.title}
             </h1>
             <p className="text-xl text-stone-600 dark:text-stone-400 font-light">
-              {language === 'fr' ? 'Choisissez votre langue' : language === 'en' ? 'Choose your language' : 'Elige tu idioma'}
+              {t.languageSelection.subtitle}
             </p>
           </div>
 
@@ -188,7 +188,7 @@ export default function GlowUpChallengeApp() {
             onClick={() => setCurrentView('onboarding')}
             className="w-full h-14 text-lg bg-gradient-to-r from-rose-400 via-pink-400 to-orange-300 hover:from-rose-500 hover:via-pink-500 hover:to-orange-400 text-white font-semibold rounded-full shadow-lg shadow-rose-200 dark:shadow-rose-900/30"
           >
-            {language === 'fr' ? 'Continuer' : language === 'en' ? 'Continue' : 'Continuar'}
+            {t.languageSelection.continue}
             <ChevronRight className="ml-2 w-5 h-5" />
           </Button>
         </div>
@@ -225,10 +225,10 @@ export default function GlowUpChallengeApp() {
             {/* Features Preview */}
             <div className="grid grid-cols-2 gap-4">
               {[
-                { icon: BookOpen, title: language === 'fr' ? '30 Jours' : language === 'en' ? '30 Days' : '30 Días', desc: language === 'fr' ? 'Contenu complet' : language === 'en' ? 'Full content' : 'Contenido completo' },
-                { icon: TrendingUp, title: language === 'fr' ? 'Progression' : language === 'en' ? 'Progress' : 'Progreso', desc: language === 'fr' ? 'Suivi avancé' : language === 'en' ? 'Advanced tracking' : 'Seguimiento avanzado' },
-                { icon: Heart, title: 'Journaling', desc: language === 'fr' ? 'Introspection' : language === 'en' ? 'Self-reflection' : 'Introspección' },
-                { icon: Target, title: 'Trackers', desc: language === 'fr' ? 'Habitudes' : language === 'en' ? 'Habits' : 'Hábitos' }
+                { icon: BookOpen, title: t.onboarding.thirtyDays, desc: t.onboarding.fullContent },
+                { icon: TrendingUp, title: t.challenge.progression, desc: t.onboarding.advancedTracking },
+                { icon: Heart, title: 'Journaling', desc: t.onboarding.selfReflection },
+                { icon: Target, title: 'Trackers', desc: t.onboarding.habits }
               ].map((feature, index) => (
                 <div
                   key={index}
@@ -287,7 +287,7 @@ export default function GlowUpChallengeApp() {
                 </div>
                 <Progress value={progressPercentage} className="h-3" />
                 <p className="text-xs text-stone-500 dark:text-stone-500 text-center">
-                  {challengeProgress.completedDays.length} / 30 {language === 'fr' ? 'jours complétés' : language === 'en' ? 'days completed' : 'días completados'}
+                  {challengeProgress.completedDays.length} / 30 {t.dashboard.daysCompleted}
                 </p>
               </CardContent>
             </Card>
@@ -319,7 +319,7 @@ export default function GlowUpChallengeApp() {
                 <CardContent className="p-4 text-center">
                   <BookOpen className="w-8 h-8 mx-auto mb-2 text-pink-400" />
                   <h3 className="font-semibold text-sm">{t.journal.title}</h3>
-                  <p className="text-xs text-stone-500 dark:text-stone-500">{journalEntries.length} {language === 'fr' ? 'entrées' : language === 'en' ? 'entries' : 'entradas'}</p>
+                  <p className="text-xs text-stone-500 dark:text-stone-500">{journalEntries.length} {t.journal.entries}</p>
                 </CardContent>
               </Card>
 
@@ -341,7 +341,7 @@ export default function GlowUpChallengeApp() {
                 <CardContent className="p-4 text-center">
                   <Layers className="w-8 h-8 mx-auto mb-2 text-rose-400" />
                   <h3 className="font-semibold text-sm">{t.routine.title}</h3>
-                  <p className="text-xs text-stone-500 dark:text-stone-500">5 {language === 'fr' ? 'étapes' : language === 'en' ? 'steps' : 'pasos'}</p>
+                  <p className="text-xs text-stone-500 dark:text-stone-500">5 {t.routine.steps}</p>
                 </CardContent>
               </Card>
 
@@ -352,7 +352,7 @@ export default function GlowUpChallengeApp() {
                 <CardContent className="p-4 text-center">
                   <ImageIcon className="w-8 h-8 mx-auto mb-2 text-pink-400" />
                   <h3 className="font-semibold text-sm">{t.visionBoard.title}</h3>
-                  <p className="text-xs text-stone-500 dark:text-stone-500">{visionBoardImages.length} {language === 'fr' ? 'images' : language === 'en' ? 'images' : 'imágenes'}</p>
+                  <p className="text-xs text-stone-500 dark:text-stone-500">{visionBoardImages.length} {t.visionBoard.images}</p>
                 </CardContent>
               </Card>
             </div>
@@ -572,13 +572,13 @@ export default function GlowUpChallengeApp() {
             <Card className={`border-none shadow-lg ${theme === 'dark' ? 'bg-stone-900' : 'bg-white'}`}>
               <CardHeader>
                 <CardTitle>{t.journal.newEntry}</CardTitle>
-                <CardDescription>{language === 'fr' ? 'Exprime-toi librement' : language === 'en' ? 'Express yourself freely' : 'Exprésate libremente'}</CardDescription>
+                <CardDescription>{t.journal.expressYourself}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">{language === 'fr' ? 'Comment je me sens aujourd\'hui ?' : language === 'en' ? 'How do I feel today?' : '¿Cómo me siento hoy?'}</label>
+                  <label className="text-sm font-medium">{t.journal.howFeelToday}</label>
                   <Textarea
-                    placeholder={language === 'fr' ? 'Ton humeur du moment...' : language === 'en' ? 'Your current mood...' : 'Tu estado de ánimo actual...'}
+                    placeholder={t.journal.yourMood}
                     value={newJournalEntry.mood}
                     onChange={(e) => setNewJournalEntry({ ...newJournalEntry, mood: e.target.value })}
                     rows={2}
@@ -587,9 +587,9 @@ export default function GlowUpChallengeApp() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">{language === 'fr' ? 'Qu\'est-ce qui m\'a apporté du glow ?' : language === 'en' ? 'What brought me glow?' : '¿Qué me trajo brillo?'}</label>
+                  <label className="text-sm font-medium">{t.journal.whatBroughtGlow}</label>
                   <Textarea
-                    placeholder={language === 'fr' ? 'Les petits moments de joie...' : language === 'en' ? 'Little moments of joy...' : 'Pequeños momentos de alegría...'}
+                    placeholder={t.journal.momentsOfJoy}
                     value={newJournalEntry.glow}
                     onChange={(e) => setNewJournalEntry({ ...newJournalEntry, glow: e.target.value })}
                     rows={2}
@@ -598,9 +598,9 @@ export default function GlowUpChallengeApp() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">{language === 'fr' ? 'Qu\'est-ce que j\'ai appris ?' : language === 'en' ? 'What did I learn?' : '¿Qué aprendí?'}</label>
+                  <label className="text-sm font-medium">{t.journal.whatLearned}</label>
                   <Textarea
-                    placeholder={language === 'fr' ? 'Tes découvertes et apprentissages...' : language === 'en' ? 'Your discoveries and learnings...' : 'Tus descubrimientos y aprendizajes...'}
+                    placeholder={t.journal.discoveriesLearnings}
                     value={newJournalEntry.learned}
                     onChange={(e) => setNewJournalEntry({ ...newJournalEntry, learned: e.target.value })}
                     rows={2}
@@ -621,18 +621,18 @@ export default function GlowUpChallengeApp() {
 
                 <Button onClick={handleSaveJournalEntry} className="w-full bg-rose-500 hover:bg-rose-600 text-white">
                   <Plus className="mr-2 w-4 h-4" />
-                  {language === 'fr' ? 'Ajouter au Journal' : language === 'en' ? 'Add to Journal' : 'Agregar al Diario'}
+                  {t.journal.addToJournal}
                 </Button>
               </CardContent>
             </Card>
 
             {/* Journal History */}
             <div className="space-y-4">
-              <h2 className="text-lg font-semibold">{language === 'fr' ? 'Historique' : language === 'en' ? 'History' : 'Historial'}</h2>
+              <h2 className="text-lg font-semibold">{t.journal.history}</h2>
               {journalEntries.length === 0 ? (
                 <div className={`text-center p-8 rounded-xl ${theme === 'dark' ? 'bg-stone-900' : 'bg-white'}`}>
                   <BookOpen className="w-12 h-12 mx-auto mb-3 text-stone-400" />
-                  <p className="text-stone-500 dark:text-stone-500">{language === 'fr' ? 'Aucune entrée pour le moment' : language === 'en' ? 'No entries yet' : 'Sin entradas por ahora'}</p>
+                  <p className="text-stone-500 dark:text-stone-500">{t.journal.noEntries}</p>
                 </div>
               ) : (
                 journalEntries.map((entry) => (
@@ -663,7 +663,7 @@ export default function GlowUpChallengeApp() {
                       )}
                       {entry.glow && (
                         <div>
-                          <p className="text-xs text-stone-500 dark:text-stone-500 mb-1">{language === 'fr' ? 'Glow du jour' : language === 'en' ? 'Today\'s glow' : 'Brillo del día'}</p>
+                          <p className="text-xs text-stone-500 dark:text-stone-500 mb-1">{t.journal.glowOfDay}</p>
                           <p className="text-sm">{entry.glow}</p>
                         </div>
                       )}
@@ -794,8 +794,8 @@ export default function GlowUpChallengeApp() {
                   <div className="flex items-center gap-3">
                     <Activity className="w-5 h-5 text-rose-500" />
                     <div>
-                      <h3 className="font-semibold">{language === 'fr' ? 'Skincare complété' : language === 'en' ? 'Skincare completed' : 'Cuidado de la piel completado'}</h3>
-                      <p className="text-xs text-stone-600 dark:text-stone-400">{language === 'fr' ? 'Routine du jour' : language === 'en' ? 'Today\'s routine' : 'Rutina del día'}</p>
+                      <h3 className="font-semibold">{t.trackers.skincareCompleted}</h3>
+                      <p className="text-xs text-stone-600 dark:text-stone-400">{t.trackers.todaysRoutine}</p>
                     </div>
                   </div>
                   <Switch
@@ -882,8 +882,8 @@ export default function GlowUpChallengeApp() {
                 <div className="pt-4 border-t border-stone-200 dark:border-stone-700">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-semibold">{language === 'fr' ? 'Routine complétée aujourd\'hui ?' : language === 'en' ? 'Routine completed today?' : '¿Rutina completada hoy?'}</p>
-                      <p className="text-xs text-stone-500 dark:text-stone-500">{language === 'fr' ? 'Marque quand tu as fini' : language === 'en' ? 'Mark when you\'re done' : 'Marca cuando termines'}</p>
+                      <p className="font-semibold">{t.routine.completedQuestion}</p>
+                      <p className="text-xs text-stone-500 dark:text-stone-500">{t.routine.markWhenDone}</p>
                     </div>
                     <Switch
                       checked={routineCompletedDates.includes(todayDate)}
@@ -923,7 +923,7 @@ export default function GlowUpChallengeApp() {
             <Card className={`border-none shadow-lg ${theme === 'dark' ? 'bg-stone-900' : 'bg-white'}`}>
               <CardHeader>
                 <CardTitle>{t.visionBoard.addImage}</CardTitle>
-                <CardDescription>{language === 'fr' ? 'Upload une image qui t\'inspire' : language === 'en' ? 'Upload an image that inspires you' : 'Sube una imagen que te inspire'}</CardDescription>
+                <CardDescription>{t.visionBoard.uploadInspire}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
@@ -935,9 +935,9 @@ export default function GlowUpChallengeApp() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">{t.visionBoard.caption} ({language === 'fr' ? 'optionnel' : language === 'en' ? 'optional' : 'opcional'})</label>
+                  <label className="text-sm font-medium">{t.visionBoard.caption} ({t.visionBoard.optional})</label>
                   <Input
-                    placeholder={language === 'fr' ? 'Une description ou affirmation...' : language === 'en' ? 'A description or affirmation...' : 'Una descripción o afirmación...'}
+                    placeholder={t.visionBoard.descriptionPlaceholder}
                     id="vision-image-caption"
                     className={theme === 'dark' ? 'bg-stone-800 border-stone-700' : 'bg-stone-50'}
                   />
@@ -955,7 +955,7 @@ export default function GlowUpChallengeApp() {
                   className="w-full bg-gradient-to-r from-rose-400 via-pink-400 to-orange-300 text-white"
                 >
                   <Plus className="mr-2 w-4 h-4" />
-                  {language === 'fr' ? 'Ajouter au Vision Board' : language === 'en' ? 'Add to Vision Board' : 'Agregar al Tablero de Visión'}
+                  {t.visionBoard.addToVisionBoard}
                 </Button>
               </CardContent>
             </Card>
@@ -1077,21 +1077,21 @@ export default function GlowUpChallengeApp() {
                         {bonusSections.reduce((acc, section) => acc + getSectionWeeklyCompletion(section.id), 0)} / {bonusSections.length * 4}
                       </p>
                       <p className="text-stone-500 dark:text-stone-400">
-                        {language === 'fr' ? 'Semaines' : language === 'en' ? 'Weeks' : 'Semanas'}
+                        {t.bonus.weeks}
                       </p>
                     </div>
                     <div className={`p-2 rounded-lg text-center ${theme === 'dark' ? 'bg-stone-800' : 'bg-stone-50'}`}>
                       <p className="font-semibold text-blue-500">
                         {bonusProgress.checklistsCompleted.length} / {checklistsData.length}
                       </p>
-                      <p className="text-stone-500 dark:text-stone-400">Checklists</p>
+                      <p className="text-stone-500 dark:text-stone-400">{t.bonus.checklists}</p>
                     </div>
                     <div className={`p-2 rounded-lg text-center ${theme === 'dark' ? 'bg-stone-800' : 'bg-stone-50'}`}>
                       <p className="font-semibold text-amber-500">
                         {bonusProgress.miniGuideStepsCompleted.length} / {softLifeGuide.steps.length}
                       </p>
                       <p className="text-stone-500 dark:text-stone-400">
-                        {language === 'fr' ? 'Guide' : language === 'en' ? 'Guide' : 'Guía'}
+                        {t.bonus.guide}
                       </p>
                     </div>
                   </div>
@@ -1146,7 +1146,7 @@ export default function GlowUpChallengeApp() {
                   <Star className="w-5 h-5 text-yellow-400" />
                   {t.bonus.affirmations}
                 </CardTitle>
-                <CardDescription>{language === 'fr' ? 'Ton arsenal de pensées positives' : language === 'en' ? 'Your arsenal of positive thoughts' : 'Tu arsenal de pensamientos positivos'}</CardDescription>
+                <CardDescription>{t.bonus.arsenalPositive}</CardDescription>
               </CardHeader>
               <CardContent>
                 <ScrollArea className="h-64">
@@ -1171,7 +1171,7 @@ export default function GlowUpChallengeApp() {
                   <ListChecks className="w-5 h-5 text-blue-400" />
                   {t.bonus.checklists}
                 </CardTitle>
-                <CardDescription>{language === 'fr' ? 'Des guides pratiques pour t\'organiser' : language === 'en' ? 'Practical guides to organize yourself' : 'Guías prácticas para organizarte'}</CardDescription>
+                <CardDescription>{t.bonus.practicalGuides}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
                 {checklistsData.map((checklist) => {
@@ -1197,7 +1197,7 @@ export default function GlowUpChallengeApp() {
                           </div>
                           <div>
                             <p className="font-semibold text-sm">{checklist.title}</p>
-                            <p className="text-xs text-stone-500 dark:text-stone-500">{checklist.items.length} {language === 'fr' ? 'étapes' : language === 'en' ? 'steps' : 'pasos'}</p>
+                            <p className="text-xs text-stone-500 dark:text-stone-500">{checklist.items.length} {t.bonus.steps}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -1233,7 +1233,7 @@ export default function GlowUpChallengeApp() {
                   <Sun className="w-5 h-5 text-amber-400" />
                   {t.bonus.miniGuide}
                 </CardTitle>
-                <CardDescription>{language === 'fr' ? '5 étapes pour une vie douce et épanouie' : language === 'en' ? '5 steps for a soft and fulfilling life' : '5 pasos para una vida suave y plena'}</CardDescription>
+                <CardDescription>{t.bonus.softLifeSteps}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-between">
@@ -1276,20 +1276,20 @@ export default function GlowUpChallengeApp() {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-stone-600 dark:text-stone-400">
-                      {language === 'fr' ? 'Pourcentage' : language === 'en' ? 'Percentage' : 'Porcentaje'}
+                      {t.settings.percentage}
                     </span>
                     <span className="font-semibold text-rose-500">{progressPercentage}%</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-stone-600 dark:text-stone-400">{t.journal.title}</span>
                     <span className="font-semibold">
-                      {journalEntries.length} {language === 'fr' ? 'entrées' : language === 'en' ? 'entries' : 'entradas'}
+                      {journalEntries.length} {t.journal.entries}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-stone-600 dark:text-stone-400">{t.visionBoard.title}</span>
                     <span className="font-semibold">
-                      {visionBoardImages.length} {language === 'fr' ? 'images' : language === 'en' ? 'images' : 'imágenes'}
+                      {visionBoardImages.length} {t.visionBoard.images}
                     </span>
                   </div>
                 </div>
@@ -1314,7 +1314,7 @@ export default function GlowUpChallengeApp() {
                         {theme === 'light' ? t.settings.light : t.settings.dark}
                       </p>
                       <p className="text-xs text-stone-500 dark:text-stone-500">
-                        {language === 'fr' ? 'Change l\'apparence' : language === 'en' ? 'Change appearance' : 'Cambiar apariencia'}
+                        {t.settings.changeAppearance}
                       </p>
                     </div>
                   </div>
@@ -1393,8 +1393,8 @@ export default function GlowUpChallengeApp() {
             {/* Export Data */}
             <Card className={`border-none shadow-lg ${theme === 'dark' ? 'bg-stone-900' : 'bg-white'}`}>
               <CardHeader>
-                <CardTitle>{language === 'fr' ? 'Export' : language === 'en' ? 'Export' : 'Exportar'}</CardTitle>
-                <CardDescription>{language === 'fr' ? 'Télécharge tes données' : language === 'en' ? 'Download your data' : 'Descarga tus datos'}</CardDescription>
+                <CardTitle>{t.settings.export}</CardTitle>
+                <CardDescription>{t.settings.downloadData}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
                 <Button
