@@ -10,7 +10,7 @@ import {
   getLocalizedBonusSections,
   getLocalizedFiftyThingsAlone
 } from '@/lib/challenge-data';
-import { Sparkles, BookOpen, TrendingUp, Home, Heart, Target, Layers, Gift, Settings, ChevronRight, Check, Plus, X, Calendar, Moon, Sun, Droplet, Zap, Smile, Activity, Utensils, Lightbulb, Image as ImageIcon, Trash2, Download, Bell, BellOff, Star, CheckSquare, ListChecks, Award, Globe } from 'lucide-react';
+import { Sparkles, BookOpen, TrendingUp, Home, Heart, Target, Layers, Gift, Settings, ChevronRight, Check, Plus, X, Calendar, Moon, Sun, Droplet, Zap, Smile, Activity, Utensils, Lightbulb, Image as ImageIcon, Trash2, Download, Bell, BellOff, Star, CheckSquare, ListChecks, Award, Globe, Trophy, Shield } from 'lucide-react';
 import { useTranslation } from '@/lib/useTranslation';
 import { Language } from '@/lib/translations';
 import { Button } from '@/components/ui/button';
@@ -68,7 +68,16 @@ export default function GlowUpChallengeApp() {
     toggleChecklistCompleted,
     toggleMiniGuideStep,
     getWeeklyBonusProgress,
-    getSectionWeeklyCompletion
+    getSectionWeeklyCompletion,
+    addSuccessEntry,
+    getSuccessCountForWeek,
+    getAllSuccessEntries,
+    addEveningQuestion,
+    getEveningQuestionCountForMonth,
+    getAllEveningQuestions,
+    addBoundaryEntry,
+    getBoundaryCountForWeek,
+    getAllBoundaryEntries
   } = useStore();
 
   const { t } = useTranslation();
@@ -98,6 +107,25 @@ export default function GlowUpChallengeApp() {
   const [showSoftLifeGuide, setShowSoftLifeGuide] = useState(false);
   const [selectedGuideStep, setSelectedGuideStep] = useState<number | null>(null);
   const [selectedBonusSection, setSelectedBonusSection] = useState<ReturnType<typeof getLocalizedBonusSections>[0] | null>(null);
+
+  // États pour les formulaires bonus
+  const [successInputs, setSuccessInputs] = useState<string[]>(['', '', '', '', '']);
+  const [eveningQuestion, setEveningQuestion] = useState('');
+  const [eveningAnswer, setEveningAnswer] = useState('');
+  const [showSuccessCongrats, setShowSuccessCongrats] = useState(false);
+  const [showBoundaryCongrats, setShowBoundaryCongrats] = useState(false);
+
+  // Fréquences idéales pour chaque limite (par semaine)
+  const boundaryFrequencies = [
+    { min: 2, max: 4 }, // 0: Ne pas répondre aux messages après une certaine heure
+    { min: 1, max: 2 }, // 1: Couper court aux conversations trop négatives
+    { min: 1, max: 1 }, // 2: Dire non à une invitation sans culpabiliser
+    { min: 1, max: 3 }, // 3: Limiter le contact avec une personne envahissante
+    { min: 0, max: 1 }, // 4: Refuser de parler d'un sujet sensible
+    { min: 1, max: 2 }, // 5: Demander du temps pour réfléchir avant de répondre
+    { min: 1, max: 1 }, // 6: Dire non à une faveur qui te met dans l'inconfort
+    { min: 1, max: 1 }  // 7: Refuser de prêter quelque chose si tu n'es pas à l'aise
+  ];
 
   useEffect(() => {
     if (hasStarted) {
@@ -148,6 +176,58 @@ export default function GlowUpChallengeApp() {
   };
 
   const progressPercentage = getProgressPercentage();
+
+  // Helper functions pour les bonus
+  const getCurrentWeek = () => {
+    const today = new Date();
+    const d = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
+    const dayNum = d.getUTCDay() || 7;
+    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
+  };
+
+  const getCurrentMonth = () => new Date().getMonth() + 1;
+  const getCurrentYear = () => new Date().getFullYear();
+
+  // Handlers pour les formulaires bonus
+  const handleSaveSuccesses = () => {
+    const validSuccesses = successInputs.filter(s => s.trim() !== '');
+    if (validSuccesses.length > 0) {
+      addSuccessEntry(validSuccesses);
+      setSuccessInputs(['', '', '', '', '']);
+
+      // Vérifier si on a atteint 3+ succès cette semaine
+      const currentWeek = getCurrentWeek();
+      const currentYear = getCurrentYear();
+      const weekCount = getSuccessCountForWeek(currentWeek, currentYear);
+
+      if (weekCount + validSuccesses.length >= 3) {
+        setShowSuccessCongrats(true);
+      }
+    }
+  };
+
+  const handleSaveEveningQuestion = () => {
+    if (eveningQuestion.trim() && eveningAnswer.trim()) {
+      addEveningQuestion(eveningQuestion, eveningAnswer);
+      setEveningQuestion('');
+      setEveningAnswer('');
+    }
+  };
+
+  const handleAddBoundary = (boundaryIndex: number) => {
+    addBoundaryEntry(boundaryIndex);
+
+    // Vérifier si on a utilisé 3+ limites différentes cette semaine
+    const currentWeek = getCurrentWeek();
+    const currentYear = getCurrentYear();
+    const weekCount = getBoundaryCountForWeek(currentWeek, currentYear);
+
+    if (weekCount + 1 >= 3) {
+      setShowBoundaryCongrats(true);
+    }
+  };
 
   // Language Selection Screen
   if (!hasSelectedLanguage) {
@@ -1802,9 +1882,275 @@ export default function GlowUpChallengeApp() {
                   <div className={`p-4 rounded-xl border-l-4 ${selectedBonusSection.id === 'petits-succes' ? 'border-green-500 bg-green-50 dark:bg-green-900/20' : selectedBonusSection.id === 'question-soir' ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20' : 'border-pink-500 bg-pink-50 dark:bg-pink-900/20'}`}>
                     <h4 className="font-semibold text-sm mb-2 flex items-center gap-2">
                       <Star className="w-4 h-4" />
-                      {selectedBonusSection.id === 'question-soir' ? 'Résultat' : 'Pourquoi ça marche ?'}
+                      {selectedBonusSection.id === 'question-soir' ? t.bonus.result : t.bonus.whyItWorks}
                     </h4>
                     <p className="text-sm leading-relaxed">{selectedBonusSection.content.why}</p>
+                  </div>
+                )}
+
+                {/* Formulaire Petits Succès */}
+                {selectedBonusSection?.id === 'petits-succes' && (
+                  <div className="space-y-4">
+                    <div className={`p-4 rounded-xl ${theme === 'dark' ? 'bg-stone-800' : 'bg-stone-50'}`}>
+                      <div className="flex items-center justify-between mb-3">
+                        <h4 className="font-semibold text-sm">{t.bonus.thisWeek}</h4>
+                        <Badge variant="outline" className="text-xs">
+                          {getSuccessCountForWeek(getCurrentWeek(), getCurrentYear())} / 5 {t.bonus.timesThisWeek}
+                        </Badge>
+                      </div>
+
+                      <div className="space-y-3">
+                        <p className="text-xs text-stone-600 dark:text-stone-400 mb-2">
+                          {t.bonus.writeYourSuccesses}
+                        </p>
+                        {successInputs.map((success, index) => (
+                          <Input
+                            key={index}
+                            value={success}
+                            onChange={(e) => {
+                              const newInputs = [...successInputs];
+                              newInputs[index] = e.target.value;
+                              setSuccessInputs(newInputs);
+                            }}
+                            placeholder={index === 0 ? t.bonus.success1 : index === 1 ? t.bonus.success2 : t.bonus.success3}
+                            className={theme === 'dark' ? 'bg-stone-900 border-stone-700' : 'bg-white'}
+                          />
+                        ))}
+                        <Button
+                          onClick={handleSaveSuccesses}
+                          disabled={!successInputs.some(s => s.trim())}
+                          className="w-full bg-green-500 hover:bg-green-600 text-white"
+                        >
+                          {t.bonus.save}
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Historique des succès */}
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-sm flex items-center gap-2">
+                        <Calendar className="w-4 h-4" />
+                        {t.bonus.history}
+                      </h4>
+                      {getAllSuccessEntries().length === 0 ? (
+                        <p className="text-sm text-stone-500 dark:text-stone-400 text-center py-4">
+                          {t.bonus.noHistory}
+                        </p>
+                      ) : (
+                        <div className="space-y-2 max-h-60 overflow-y-auto">
+                          {getAllSuccessEntries().map((entry) => (
+                            <div
+                              key={entry.id}
+                              className={`p-3 rounded-xl ${theme === 'dark' ? 'bg-stone-800' : 'bg-stone-50'}`}
+                            >
+                              <p className="text-xs text-stone-500 dark:text-stone-400 mb-2">
+                                {new Date(entry.date).toLocaleDateString(language === 'fr' ? 'fr-FR' : language === 'en' ? 'en-US' : 'es-ES', {
+                                  weekday: 'long',
+                                  year: 'numeric',
+                                  month: 'long',
+                                  day: 'numeric'
+                                })}
+                              </p>
+                              <ul className="space-y-1">
+                                {entry.successes.map((success, idx) => (
+                                  <li key={idx} className="text-sm flex items-start gap-2">
+                                    <span className="text-green-500">✓</span>
+                                    <span>{success}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Formulaire Question du Soir */}
+                {selectedBonusSection?.id === 'question-soir' && (
+                  <div className="space-y-4">
+                    <div className={`p-4 rounded-xl ${theme === 'dark' ? 'bg-stone-800' : 'bg-stone-50'}`}>
+                      <div className="flex items-center justify-between mb-3">
+                        <h4 className="font-semibold text-sm">{t.bonus.thisWeek}</h4>
+                        <Badge variant="outline" className="text-xs">
+                          {getEveningQuestionCountForMonth(getCurrentMonth(), getCurrentYear())} {t.bonus.timesThisWeek}
+                        </Badge>
+                      </div>
+
+                      <div className="space-y-3">
+                        <div>
+                          <label className="text-xs font-medium text-stone-600 dark:text-stone-400 mb-1 block">
+                            {t.bonus.yourQuestion}
+                          </label>
+                          <Input
+                            value={eveningQuestion}
+                            onChange={(e) => setEveningQuestion(e.target.value)}
+                            placeholder={t.bonus.questionPlaceholder}
+                            className={theme === 'dark' ? 'bg-stone-900 border-stone-700' : 'bg-white'}
+                          />
+                        </div>
+                        <div>
+                          <label className="text-xs font-medium text-stone-600 dark:text-stone-400 mb-1 block">
+                            {t.bonus.yourAnswer}
+                          </label>
+                          <Textarea
+                            value={eveningAnswer}
+                            onChange={(e) => setEveningAnswer(e.target.value)}
+                            placeholder={t.bonus.answerPlaceholder}
+                            className={theme === 'dark' ? 'bg-stone-900 border-stone-700' : 'bg-white'}
+                            rows={3}
+                          />
+                        </div>
+                        <Button
+                          onClick={handleSaveEveningQuestion}
+                          disabled={!eveningQuestion.trim() || !eveningAnswer.trim()}
+                          className="w-full bg-purple-500 hover:bg-purple-600 text-white"
+                        >
+                          {t.bonus.save}
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Historique des questions */}
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-sm flex items-center gap-2">
+                        <Calendar className="w-4 h-4" />
+                        {t.bonus.history}
+                      </h4>
+                      {getAllEveningQuestions().length === 0 ? (
+                        <p className="text-sm text-stone-500 dark:text-stone-400 text-center py-4">
+                          {t.bonus.noHistory}
+                        </p>
+                      ) : (
+                        <div className="space-y-2 max-h-60 overflow-y-auto">
+                          {getAllEveningQuestions().map((entry) => (
+                            <div
+                              key={entry.id}
+                              className={`p-3 rounded-xl ${theme === 'dark' ? 'bg-stone-800' : 'bg-stone-50'}`}
+                            >
+                              <p className="text-xs text-stone-500 dark:text-stone-400 mb-2">
+                                {new Date(entry.date).toLocaleDateString(language === 'fr' ? 'fr-FR' : language === 'en' ? 'en-US' : 'es-ES', {
+                                  weekday: 'long',
+                                  year: 'numeric',
+                                  month: 'long',
+                                  day: 'numeric'
+                                })}
+                              </p>
+                              <p className="text-sm font-medium mb-1">« {entry.question} »</p>
+                              <p className="text-sm text-purple-600 dark:text-purple-400">→ {entry.answer}</p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Formulaire 8 Limites */}
+                {selectedBonusSection?.id === 'limites-paix' && (
+                  <div className="space-y-4">
+                    <div className={`p-4 rounded-xl ${theme === 'dark' ? 'bg-stone-800' : 'bg-stone-50'}`}>
+                      <div className="flex items-center justify-between mb-3">
+                        <h4 className="font-semibold text-sm">{t.bonus.thisWeek}</h4>
+                        <Badge variant="outline" className="text-xs">
+                          {getBoundaryCountForWeek(getCurrentWeek(), getCurrentYear())} {t.bonus.boundariesLabel} {t.bonus.usedThisWeek}
+                        </Badge>
+                      </div>
+
+                      <div className="space-y-2">
+                        <p className="text-xs text-stone-600 dark:text-stone-400 mb-3">
+                          {t.bonus.boundaryUsedToday}
+                        </p>
+                        {selectedBonusSection.content.steps.map((boundary, index) => {
+                          const currentWeek = getCurrentWeek();
+                          const currentYear = getCurrentYear();
+                          const count = getBoundaryCountForWeek(currentWeek, currentYear, index);
+                          const freq = boundaryFrequencies[index];
+                          const isIdeal = count >= freq.min && count <= freq.max;
+
+                          return (
+                            <div
+                              key={index}
+                              onClick={() => handleAddBoundary(index)}
+                              className={`p-3 rounded-xl cursor-pointer transition-all ${
+                                theme === 'dark' ? 'bg-stone-900 hover:bg-stone-800' : 'bg-white hover:bg-stone-50'
+                              } border-2 ${
+                                isIdeal
+                                  ? 'border-pink-500'
+                                  : count > 0
+                                    ? 'border-pink-300'
+                                    : 'border-stone-200 dark:border-stone-700'
+                              }`}
+                            >
+                              <div className="flex items-start justify-between gap-3">
+                                <div className="flex-1">
+                                  <p className="text-sm font-medium mb-1">{boundary}</p>
+                                  <p className="text-xs text-stone-500 dark:text-stone-400">
+                                    {freq.min === freq.max
+                                      ? `${freq.min} ${t.bonus.timesThisWeek}`
+                                      : `${freq.min}-${freq.max} ${t.bonus.timesThisWeek}`}
+                                  </p>
+                                </div>
+                                <div className="flex flex-col items-center gap-1">
+                                  <Badge
+                                    variant={isIdeal ? 'default' : 'outline'}
+                                    className={`text-xs ${isIdeal ? 'bg-pink-500' : ''}`}
+                                  >
+                                    {count}
+                                  </Badge>
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    className="h-6 w-6 p-0 rounded-full"
+                                  >
+                                    <Plus className="w-4 h-4" />
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Historique des limites */}
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-sm flex items-center gap-2">
+                        <Calendar className="w-4 h-4" />
+                        {t.bonus.history}
+                      </h4>
+                      {getAllBoundaryEntries().length === 0 ? (
+                        <p className="text-sm text-stone-500 dark:text-stone-400 text-center py-4">
+                          {t.bonus.noHistory}
+                        </p>
+                      ) : (
+                        <div className="space-y-2 max-h-60 overflow-y-auto">
+                          {getAllBoundaryEntries().map((entry) => {
+                            const boundaryText = selectedBonusSection.content.steps[entry.boundaryIndex];
+                            return (
+                              <div
+                                key={entry.id}
+                                className={`p-3 rounded-xl ${theme === 'dark' ? 'bg-stone-800' : 'bg-stone-50'}`}
+                              >
+                                <p className="text-xs text-stone-500 dark:text-stone-400 mb-1">
+                                  {new Date(entry.date).toLocaleDateString(language === 'fr' ? 'fr-FR' : language === 'en' ? 'en-US' : 'es-ES', {
+                                    weekday: 'long',
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                  })}
+                                </p>
+                                <p className="text-sm flex items-start gap-2">
+                                  <span className="text-pink-500">🛡️</span>
+                                  <span>{boundaryText}</span>
+                                </p>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
@@ -1860,6 +2206,66 @@ export default function GlowUpChallengeApp() {
             <Button
               onClick={() => setShowCongratulations(false)}
               className="w-full bg-gradient-to-r from-rose-400 via-pink-400 to-orange-300 hover:from-rose-500 hover:via-pink-500 hover:to-orange-400 text-white"
+            >
+              {t.challenge.keepGoing}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog de Félicitations - Petits Succès */}
+      <Dialog open={showSuccessCongrats} onOpenChange={setShowSuccessCongrats}>
+        <DialogContent className={`max-w-sm ${theme === 'dark' ? 'bg-stone-900 border-stone-800' : 'bg-white'}`}>
+          <DialogHeader>
+            <DialogTitle className="text-center text-2xl">
+              {t.bonus.congratsTitle}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-6 py-4">
+            <div className="flex justify-center">
+              <div className="w-24 h-24 rounded-full bg-gradient-to-r from-green-400 to-emerald-400 flex items-center justify-center animate-pulse">
+                <Trophy className="w-12 h-12 text-white" />
+              </div>
+            </div>
+            <div className="text-center space-y-2">
+              <h3 className="text-xl font-bold">{t.bonus.successCongratsMessage}</h3>
+              <p className="text-stone-600 dark:text-stone-400">
+                {t.bonus.successCongratsSubtitle}
+              </p>
+            </div>
+            <Button
+              onClick={() => setShowSuccessCongrats(false)}
+              className="w-full bg-gradient-to-r from-green-400 to-emerald-400 hover:from-green-500 hover:to-emerald-500 text-white"
+            >
+              {t.challenge.keepGoing}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog de Félicitations - Limites */}
+      <Dialog open={showBoundaryCongrats} onOpenChange={setShowBoundaryCongrats}>
+        <DialogContent className={`max-w-sm ${theme === 'dark' ? 'bg-stone-900 border-stone-800' : 'bg-white'}`}>
+          <DialogHeader>
+            <DialogTitle className="text-center text-2xl">
+              {t.bonus.congratsTitle}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-6 py-4">
+            <div className="flex justify-center">
+              <div className="w-24 h-24 rounded-full bg-gradient-to-r from-pink-400 to-rose-400 flex items-center justify-center animate-pulse">
+                <Shield className="w-12 h-12 text-white" />
+              </div>
+            </div>
+            <div className="text-center space-y-2">
+              <h3 className="text-xl font-bold">{t.bonus.boundaryCongratsMessage}</h3>
+              <p className="text-stone-600 dark:text-stone-400">
+                {t.bonus.boundaryCongratsSubtitle}
+              </p>
+            </div>
+            <Button
+              onClick={() => setShowBoundaryCongrats(false)}
+              className="w-full bg-gradient-to-r from-pink-400 to-rose-400 hover:from-pink-500 hover:to-rose-500 text-white"
             >
               {t.challenge.keepGoing}
             </Button>

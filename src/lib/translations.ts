@@ -193,6 +193,29 @@ export interface Translation {
     softLifeSteps: string;
     guide: string;
     steps: string;
+    whyItWorks: string;
+    result: string;
+    thisWeek: string;
+    timesThisWeek: string;
+    writeYourSuccesses: string;
+    success1: string;
+    success2: string;
+    success3: string;
+    save: string;
+    history: string;
+    noHistory: string;
+    yourQuestion: string;
+    questionPlaceholder: string;
+    yourAnswer: string;
+    answerPlaceholder: string;
+    boundariesLabel: string;
+    usedThisWeek: string;
+    boundaryUsedToday: string;
+    congratsTitle: string;
+    successCongratsMessage: string;
+    successCongratsSubtitle: string;
+    boundaryCongratsMessage: string;
+    boundaryCongratsSubtitle: string;
   };
   
   // Settings
@@ -403,6 +426,29 @@ export const translations: Record<Language, Translation> = {
       softLifeSteps: '5 étapes pour une vie douce et épanouie',
       guide: 'Guide',
       steps: 'étapes',
+      whyItWorks: 'Pourquoi ça marche ?',
+      result: 'Résultat',
+      thisWeek: 'Cette semaine',
+      timesThisWeek: 'fois cette semaine',
+      writeYourSuccesses: 'Écris jusqu\'à 5 petites réussites de cette semaine :',
+      success1: 'Ex: J\'ai dit non à quelque chose qui ne me convenait pas',
+      success2: 'Ex: J\'ai pris du temps pour moi',
+      success3: 'Ex: J\'ai terminé une tâche que je repoussais',
+      save: 'Enregistrer',
+      history: 'Historique',
+      noHistory: 'Aucune entrée pour le moment',
+      yourQuestion: 'Ta question du soir',
+      questionPlaceholder: 'Ex: Qu\'est-ce qui m\'a rendue fière aujourd\'hui ?',
+      yourAnswer: 'Ta réponse',
+      answerPlaceholder: 'Écris ta réponse ici...',
+      boundariesLabel: 'limites',
+      usedThisWeek: 'utilisées cette semaine',
+      boundaryUsedToday: 'Quelle limite as-tu utilisée aujourd\'hui ?',
+      congratsTitle: 'Bravo ! 🎉',
+      successCongratsMessage: 'Tu as célébré 3+ petits succès cette semaine !',
+      successCongratsSubtitle: 'Continue à reconnaître tes victoires, même les plus petites.',
+      boundaryCongratsMessage: 'Tu as utilisé 3+ limites différentes cette semaine !',
+      boundaryCongratsSubtitle: 'Tu protèges ta paix intérieure avec brio.',
     },
     settings: {
       title: 'Profil',
@@ -607,6 +653,29 @@ export const translations: Record<Language, Translation> = {
       softLifeSteps: '5 steps for a soft and fulfilling life',
       guide: 'Guide',
       steps: 'steps',
+      whyItWorks: 'Why it works?',
+      result: 'Result',
+      thisWeek: 'This week',
+      timesThisWeek: 'times this week',
+      writeYourSuccesses: 'Write up to 5 small wins from this week:',
+      success1: 'Ex: I said no to something that didn\'t suit me',
+      success2: 'Ex: I took time for myself',
+      success3: 'Ex: I completed a task I was putting off',
+      save: 'Save',
+      history: 'History',
+      noHistory: 'No entries yet',
+      yourQuestion: 'Your evening question',
+      questionPlaceholder: 'Ex: What made me proud today?',
+      yourAnswer: 'Your answer',
+      answerPlaceholder: 'Write your answer here...',
+      boundariesLabel: 'boundaries',
+      usedThisWeek: 'used this week',
+      boundaryUsedToday: 'Which boundary did you use today?',
+      congratsTitle: 'Congratulations! 🎉',
+      successCongratsMessage: 'You celebrated 3+ small wins this week!',
+      successCongratsSubtitle: 'Keep recognizing your victories, even the smallest ones.',
+      boundaryCongratsMessage: 'You used 3+ different boundaries this week!',
+      boundaryCongratsSubtitle: 'You\'re protecting your inner peace brilliantly.',
     },
     settings: {
       title: 'Profile',
@@ -811,6 +880,29 @@ export const translations: Record<Language, Translation> = {
       softLifeSteps: '5 pasos para una vida suave y plena',
       guide: 'Guía',
       steps: 'pasos',
+      whyItWorks: '¿Por qué funciona?',
+      result: 'Resultado',
+      thisWeek: 'Esta semana',
+      timesThisWeek: 'veces esta semana',
+      writeYourSuccesses: 'Escribe hasta 5 pequeños logros de esta semana:',
+      success1: 'Ej: Dije no a algo que no me convenía',
+      success2: 'Ej: Me tomé tiempo para mí',
+      success3: 'Ej: Completé una tarea que estaba posponiendo',
+      save: 'Guardar',
+      history: 'Historial',
+      noHistory: 'Sin entradas por ahora',
+      yourQuestion: 'Tu pregunta de la noche',
+      questionPlaceholder: 'Ej: ¿Qué me hizo sentir orgullosa hoy?',
+      yourAnswer: 'Tu respuesta',
+      answerPlaceholder: 'Escribe tu respuesta aquí...',
+      boundariesLabel: 'límites',
+      usedThisWeek: 'usados esta semana',
+      boundaryUsedToday: '¿Qué límite usaste hoy?',
+      congratsTitle: '¡Felicitaciones! 🎉',
+      successCongratsMessage: '¡Celebraste 3+ pequeños logros esta semana!',
+      successCongratsSubtitle: 'Sigue reconociendo tus victorias, incluso las más pequeñas.',
+      boundaryCongratsMessage: '¡Usaste 3+ límites diferentes esta semana!',
+      boundaryCongratsSubtitle: 'Estás protegiendo tu paz interior brillantemente.',
     },
     settings: {
       title: 'Perfil',

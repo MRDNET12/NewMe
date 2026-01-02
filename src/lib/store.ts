@@ -4,6 +4,15 @@ import { Language } from './translations';
 
 export type View = 'language-selection' | 'onboarding' | 'dashboard' | 'challenge' | 'journal' | 'trackers' | 'routine' | 'vision-board' | 'bonus' | 'settings';
 
+// Helper function to get ISO week number
+function getWeekNumber(date: Date): number {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
+}
+
 interface ChallengeProgress {
   completedDays: number[];
   currentDay: number;
@@ -55,10 +64,41 @@ interface WeeklyBonusProgress {
   notes?: string;
 }
 
+// Petits succès - jusqu'à 5 réussites par semaine
+interface SuccessEntry {
+  id: string;
+  date: string; // YYYY-MM-DD
+  week: number; // Numéro de la semaine dans l'année
+  year: number;
+  successes: string[]; // Jusqu'à 5 succès
+}
+
+// Question du soir - suivi mensuel
+interface EveningQuestionEntry {
+  id: string;
+  date: string; // YYYY-MM-DD
+  month: number; // 1-12
+  year: number;
+  question: string;
+  answer: string;
+}
+
+// 8 limites pour préserver la paix intérieure
+interface BoundaryEntry {
+  id: string;
+  date: string; // YYYY-MM-DD
+  week: number; // Numéro de la semaine dans l'année
+  year: number;
+  boundaryIndex: number; // 0-7 (index de la limite utilisée)
+}
+
 interface BonusProgress {
   weeklyProgress: WeeklyBonusProgress[];
   checklistsCompleted: string[]; // IDs des checklists complétées
   miniGuideStepsCompleted: number[]; // Indices des étapes du mini-guide complétées
+  successEntries: SuccessEntry[]; // Historique des petits succès
+  eveningQuestions: EveningQuestionEntry[]; // Historique des questions du soir
+  boundaryEntries: BoundaryEntry[]; // Historique des limites utilisées
 }
 
 interface AppState {
@@ -123,6 +163,24 @@ interface AppState {
   toggleMiniGuideStep: (stepIndex: number) => void;
   getWeeklyBonusProgress: (sectionId: string, week: number) => WeeklyBonusProgress | undefined;
   getSectionWeeklyCompletion: (sectionId: string) => number; // Retourne le nombre de semaines complétées
+
+  // Petits succès
+  addSuccessEntry: (successes: string[]) => void;
+  getSuccessEntriesForWeek: (week: number, year: number) => SuccessEntry[];
+  getSuccessCountForWeek: (week: number, year: number) => number;
+  getAllSuccessEntries: () => SuccessEntry[];
+
+  // Question du soir
+  addEveningQuestion: (question: string, answer: string) => void;
+  getEveningQuestionsForMonth: (month: number, year: number) => EveningQuestionEntry[];
+  getEveningQuestionCountForMonth: (month: number, year: number) => number;
+  getAllEveningQuestions: () => EveningQuestionEntry[];
+
+  // Limites
+  addBoundaryEntry: (boundaryIndex: number) => void;
+  getBoundaryEntriesForWeek: (week: number, year: number) => BoundaryEntry[];
+  getBoundaryCountForWeek: (week: number, year: number, boundaryIndex?: number) => number;
+  getAllBoundaryEntries: () => BoundaryEntry[];
 
   // Progress Calculation
   getProgressPercentage: () => number;
@@ -358,7 +416,10 @@ export const useStore = create<AppState>()(
       bonusProgress: {
         weeklyProgress: [],
         checklistsCompleted: [],
-        miniGuideStepsCompleted: []
+        miniGuideStepsCompleted: [],
+        successEntries: [],
+        eveningQuestions: [],
+        boundaryEntries: []
       },
       toggleWeeklyBonus: (sectionId, week) => {
         const { weeklyProgress } = get().bonusProgress;
@@ -468,6 +529,119 @@ export const useStore = create<AppState>()(
         return get().bonusProgress.weeklyProgress.filter(
           (p) => p.sectionId === sectionId && p.completed
         ).length;
+      },
+
+      // Petits succès
+      addSuccessEntry: (successes) => {
+        const today = new Date();
+        const weekNumber = getWeekNumber(today);
+        const year = today.getFullYear();
+
+        const newEntry: SuccessEntry = {
+          id: crypto.randomUUID(),
+          date: today.toISOString().split('T')[0],
+          week: weekNumber,
+          year,
+          successes
+        };
+
+        set({
+          bonusProgress: {
+            ...get().bonusProgress,
+            successEntries: [newEntry, ...get().bonusProgress.successEntries]
+          }
+        });
+      },
+      getSuccessEntriesForWeek: (week, year) => {
+        return get().bonusProgress.successEntries.filter(
+          (entry) => entry.week === week && entry.year === year
+        );
+      },
+      getSuccessCountForWeek: (week, year) => {
+        const entries = get().bonusProgress.successEntries.filter(
+          (entry) => entry.week === week && entry.year === year
+        );
+        return entries.reduce((total, entry) => total + entry.successes.length, 0);
+      },
+      getAllSuccessEntries: () => {
+        return get().bonusProgress.successEntries;
+      },
+
+      // Question du soir
+      addEveningQuestion: (question, answer) => {
+        const today = new Date();
+        const month = today.getMonth() + 1; // 1-12
+        const year = today.getFullYear();
+
+        const newEntry: EveningQuestionEntry = {
+          id: crypto.randomUUID(),
+          date: today.toISOString().split('T')[0],
+          month,
+          year,
+          question,
+          answer
+        };
+
+        set({
+          bonusProgress: {
+            ...get().bonusProgress,
+            eveningQuestions: [newEntry, ...get().bonusProgress.eveningQuestions]
+          }
+        });
+      },
+      getEveningQuestionsForMonth: (month, year) => {
+        return get().bonusProgress.eveningQuestions.filter(
+          (entry) => entry.month === month && entry.year === year
+        );
+      },
+      getEveningQuestionCountForMonth: (month, year) => {
+        return get().bonusProgress.eveningQuestions.filter(
+          (entry) => entry.month === month && entry.year === year
+        ).length;
+      },
+      getAllEveningQuestions: () => {
+        return get().bonusProgress.eveningQuestions;
+      },
+
+      // Limites
+      addBoundaryEntry: (boundaryIndex) => {
+        const today = new Date();
+        const weekNumber = getWeekNumber(today);
+        const year = today.getFullYear();
+
+        const newEntry: BoundaryEntry = {
+          id: crypto.randomUUID(),
+          date: today.toISOString().split('T')[0],
+          week: weekNumber,
+          year,
+          boundaryIndex
+        };
+
+        set({
+          bonusProgress: {
+            ...get().bonusProgress,
+            boundaryEntries: [newEntry, ...get().bonusProgress.boundaryEntries]
+          }
+        });
+      },
+      getBoundaryEntriesForWeek: (week, year) => {
+        return get().bonusProgress.boundaryEntries.filter(
+          (entry) => entry.week === week && entry.year === year
+        );
+      },
+      getBoundaryCountForWeek: (week, year, boundaryIndex) => {
+        const entries = get().bonusProgress.boundaryEntries.filter(
+          (entry) => entry.week === week && entry.year === year
+        );
+
+        if (boundaryIndex !== undefined) {
+          return entries.filter((entry) => entry.boundaryIndex === boundaryIndex).length;
+        }
+
+        return entries.length;
+      },
+      getAllBoundaryEntries: () => {
+        return get().bonusProgress.boundaryEntries;
       },
 
       // Progress Calculation
