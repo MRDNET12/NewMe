@@ -1,15 +1,37 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { DailyChecklist } from '@/components/daily-checklist'
 import { ProgressTracker } from '@/components/progress-tracker'
 import { MoodJournal } from '@/components/mood-journal'
 import { GloweeBadges } from '@/components/glowee-badges'
+import { Onboarding } from '@/components/onboarding'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Sparkles, TrendingUp, Heart, Trophy } from 'lucide-react'
+import { hasSeenOnboarding, markOnboardingSeen } from '@/lib/storage'
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('daily')
+  const [showOnboarding, setShowOnboarding] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    if (!hasSeenOnboarding()) {
+      setShowOnboarding(true)
+    }
+  }, [])
+
+  const handleOnboardingComplete = () => {
+    markOnboardingSeen()
+    setShowOnboarding(false)
+  }
+
+  if (!mounted) return null
+
+  if (showOnboarding) {
+    return <Onboarding onComplete={handleOnboardingComplete} />
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
@@ -70,7 +92,7 @@ export default function Home() {
 
       <footer className="mt-16 py-8 text-center text-gray-500 text-sm">
         <p>
-          New Me - En 30 jours, tu ne changes pas qui tu es. Tu redeviens qui tu étais censée être. 🦋
+          New Me - En 30 jours, tu ne changes pas qui tu es. Tu redeviens qui tu était censée être. 🦋
         </p>
         <p className="mt-2">✨ Glowee t'accompagne dans ta transformation ✨</p>
       </footer>

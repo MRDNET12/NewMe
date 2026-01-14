@@ -1,5 +1,6 @@
 export const STORAGE_KEY = 'new-me-progress'
 export const STORAGE_KEY_BADGES = 'new-me-badges'
+export const STORAGE_KEY_ONBOARDING = 'new-me-onboarding-seen'
 
 export function loadProgress(): Record<string, any> {
   if (typeof window === 'undefined') return {}
@@ -54,4 +55,19 @@ export function getDayNumber(): number {
   const diffTime = Math.abs(current.getTime() - start.getTime())
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1
   return Math.min(diffDays, 30)
+}
+
+export function hasSeenOnboarding(): boolean {
+  if (typeof window === 'undefined') return false
+  try {
+    const seen = localStorage.getItem(STORAGE_KEY_ONBOARDING)
+    return seen === 'true'
+  } catch {
+    return false
+  }
+}
+
+export function markOnboardingSeen(): void {
+  if (typeof window === 'undefined') return
+  localStorage.setItem(STORAGE_KEY_ONBOARDING, 'true')
 }
