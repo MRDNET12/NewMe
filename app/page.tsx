@@ -6,9 +6,36 @@ import { ProgressTracker } from '@/components/progress-tracker'
 import { MoodJournal } from '@/components/mood-journal'
 import { GloweeBadges } from '@/components/glowee-badges'
 import { Onboarding } from '@/components/onboarding'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Sparkles, TrendingUp, Heart, Trophy } from 'lucide-react'
+import { BottomNavigation } from '@/components/bottom-navigation'
+import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { hasSeenOnboarding, markOnboardingSeen } from '@/lib/storage'
+
+const ButterflyMascot = () => (
+  <div className="relative">
+    <svg width="60" height="60" viewBox="0 0 120 120" className="animate-pulse">
+      <defs>
+        <linearGradient id="wingGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style={{ stopColor: '#ec4899', stopOpacity: 1 }} />
+          <stop offset="100%" style={{ stopColor: '#a855f7', stopOpacity: 1 }} />
+        </linearGradient>
+        <linearGradient id="wingGrad2" x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" style={{ stopColor: '#f472b6', stopOpacity: 1 }} />
+          <stop offset="100%" style={{ stopColor: '#c084fc', stopOpacity: 1 }} />
+        </linearGradient>
+      </defs>
+      <g transform="translate(60, 60)">
+        <ellipse cx="0" cy="0" rx="8" ry="10" fill="#8b5cf6" />
+        <path d="M 0 -8 Q -30 -40 -50 -20 Q -40 0 -10 0 Z" fill="url(#wingGrad1)" className="animate-bounce" style={{ animationDelay: '0s' }} />
+        <path d="M 0 8 Q -30 40 -50 20 Q -40 0 -10 0 Z" fill="url(#wingGrad2)" className="animate-bounce" style={{ animationDelay: '0.1s' }} />
+        <path d="M 0 -8 Q 30 -40 50 -20 Q 40 0 10 0 Z" fill="url(#wingGrad1)" className="animate-bounce" style={{ animationDelay: '0.05s' }} />
+        <path d="M 0 8 Q 30 40 50 20 Q 40 0 10 0 Z" fill="url(#wingGrad2)" className="animate-bounce" style={{ animationDelay: '0.15s' }} />
+        <circle cx="-2" cy="-3" r="2" fill="#1f2937" />
+        <circle cx="2" cy="-3" r="2" fill="#1f2937" />
+        <path d="M -3 2 Q 0 4 3 2" stroke="#1f2937" strokeWidth="1" fill="none" />
+      </g>
+    </svg>
+  </div>
+)
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('daily')
@@ -34,44 +61,23 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
-      <header className="bg-gradient-to-r from-pink-400 to-purple-500 text-white py-6 px-4 shadow-lg">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="text-4xl">✨</div>
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold">New Me</h1>
-              <p className="text-sm text-pink-100">Ton voyage vers la meilleure version de toi-même</p>
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 pb-20">
+      <header className="bg-gradient-to-r from-pink-400 to-purple-500 text-white py-8 px-4 shadow-lg">
+        <div className="max-w-7xl mx-auto flex items-center justify-center gap-4">
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold text-center">New Me</h1>
+            <div className="flex items-center justify-center gap-2 mt-2 text-sm md:text-base">
+              <ButterflyMascot />
+              <p className="text-pink-100 font-medium">
+                Avançons vers la meilleure version de toi-même
+              </p>
             </div>
-          </div>
-          <div className="hidden md:flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full">
-            <span className="text-2xl">🦋</span>
-            <span className="text-sm font-medium">Glowee t'accompagne 💛</span>
           </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      <main className="max-w-7xl mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 h-auto bg-white/80 backdrop-blur">
-            <TabsTrigger value="daily" className="flex flex-col gap-1 p-3 data-[state=active]:bg-pink-500 data-[state=active]:text-white">
-              <Sparkles className="w-5 h-5" />
-              <span className="text-xs">Aujourd'hui</span>
-            </TabsTrigger>
-            <TabsTrigger value="progress" className="flex flex-col gap-1 p-3 data-[state=active]:bg-purple-500 data-[state=active]:text-white">
-              <TrendingUp className="w-5 h-5" />
-              <span className="text-xs">Progression</span>
-            </TabsTrigger>
-            <TabsTrigger value="mood" className="flex flex-col gap-1 p-3 data-[state=active]:bg-pink-500 data-[state=active]:text-white">
-              <Heart className="w-5 h-5" />
-              <span className="text-xs">Journal</span>
-            </TabsTrigger>
-            <TabsTrigger value="badges" className="flex flex-col gap-1 p-3 data-[state=active]:bg-yellow-500 data-[state=active]:text-white">
-              <Trophy className="w-5 h-5" />
-              <span className="text-xs">Badges</span>
-            </TabsTrigger>
-          </TabsList>
-
           <TabsContent value="daily" className="space-y-6">
             <DailyChecklist />
           </TabsContent>
@@ -90,12 +96,8 @@ export default function Home() {
         </Tabs>
       </main>
 
-      <footer className="mt-16 py-8 text-center text-gray-500 text-sm">
-        <p>
-          New Me - En 30 jours, tu ne changes pas qui tu es. Tu redeviens qui tu était censée être. 🦋
-        </p>
-        <p className="mt-2">✨ Glowee t'accompagne dans ta transformation ✨</p>
-      </footer>
+      <BottomNavigation activeTab={activeTab} onTabChange={setActiveTab} />
     </div>
   )
 }
+

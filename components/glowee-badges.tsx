@@ -7,6 +7,33 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge as UIBadge } from '@/components/ui/badge'
 import { Sparkles, Award } from 'lucide-react'
 
+const ButterflyMascot = () => (
+  <div className="relative">
+    <svg width="40" height="40" viewBox="0 0 120 120" className="animate-pulse">
+      <defs>
+        <linearGradient id="wingGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style={{ stopColor: '#ec4899', stopOpacity: 1 }} />
+          <stop offset="100%" style={{ stopColor: '#a855f7', stopOpacity: 1 }} />
+        </linearGradient>
+        <linearGradient id="wingGrad2" x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" style={{ stopColor: '#f472b6', stopOpacity: 1 }} />
+          <stop offset="100%" style={{ stopColor: '#c084fc', stopOpacity: 1 }} />
+        </linearGradient>
+      </defs>
+      <g transform="translate(60, 60)">
+        <ellipse cx="0" cy="0" rx="8" ry="10" fill="#8b5cf6" />
+        <path d="M 0 -8 Q -30 -40 -50 -20 Q -40 0 -10 0 Z" fill="url(#wingGrad1)" className="animate-bounce" style={{ animationDelay: '0s' }} />
+        <path d="M 0 8 Q -30 40 -50 20 Q -40 0 -10 0 Z" fill="url(#wingGrad2)" className="animate-bounce" style={{ animationDelay: '0.1s' }} />
+        <path d="M 0 -8 Q 30 -40 50 -20 Q 40 0 10 0 Z" fill="url(#wingGrad1)" className="animate-bounce" style={{ animationDelay: '0.05s' }} />
+        <path d="M 0 8 Q 30 40 50 20 Q 40 0 10 0 Z" fill="url(#wingGrad2)" className="animate-bounce" style={{ animationDelay: '0.15s' }} />
+        <circle cx="-2" cy="-3" r="2" fill="#1f2937" />
+        <circle cx="2" cy="-3" r="2" fill="#1f2937" />
+        <path d="M -3 2 Q 0 4 3 2" stroke="#1f2937" strokeWidth="1" fill="none" />
+      </g>
+    </svg>
+  </div>
+)
+
 export function GloweeBadges() {
   const [unlockedBadges, setUnlockedBadges] = useState<string[]>([])
   const [message, setMessage] = useState('')
@@ -87,7 +114,7 @@ export function GloweeBadges() {
     'Chaque petit pas compte ✨',
     'Tu brillances de l\'intérieur 🌟',
     'La lenteur, c\'est du self-care 💜',
-    'En 30 jours, tu redeviens qui tu étais censée être 🦋',
+    'En 30 jours, tu redeviens qui tu étais censée être',
     'Tu vas grave voir la différence ! 💫',
     'New Me n\'est pas une contrainte, c\'est un rituel d\'amour 🌸'
   ]
@@ -142,7 +169,7 @@ export function GloweeBadges() {
       <Card className="bg-gradient-to-br from-pink-50 to-purple-50 border-pink-200">
         <CardContent className="pt-6">
           <div className="flex items-center gap-3">
-            <div className="text-4xl">✨</div>
+            <ButterflyMascot />
             <div>
               <div className="font-bold text-pink-900">Glowee dit :</div>
               <div className="text-pink-700">{randomMessage}</div>

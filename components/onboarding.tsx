@@ -4,6 +4,34 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 
+const ButterflyMascot = () => (
+  <div className="relative">
+    <svg width="120" height="120" viewBox="0 0 120 120" className="animate-pulse">
+      <defs>
+        <linearGradient id="wingGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style={{ stopColor: '#ec4899', stopOpacity: 1 }} />
+          <stop offset="100%" style={{ stopColor: '#a855f7', stopOpacity: 1 }} />
+        </linearGradient>
+        <linearGradient id="wingGrad2" x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" style={{ stopColor: '#f472b6', stopOpacity: 1 }} />
+          <stop offset="100%" style={{ stopColor: '#c084fc', stopOpacity: 1 }} />
+        </linearGradient>
+      </defs>
+      <g transform="translate(60, 60)">
+        <ellipse cx="0" cy="0" rx="8" ry="10" fill="#8b5cf6" />
+        <path d="M 0 -8 Q -30 -40 -50 -20 Q -40 0 -10 0 Z" fill="url(#wingGrad1)" className="animate-bounce" style={{ animationDelay: '0s' }} />
+        <path d="M 0 8 Q -30 40 -50 20 Q -40 0 -10 0 Z" fill="url(#wingGrad2)" className="animate-bounce" style={{ animationDelay: '0.1s' }} />
+        <path d="M 0 -8 Q 30 -40 50 -20 Q 40 0 10 0 Z" fill="url(#wingGrad1)" className="animate-bounce" style={{ animationDelay: '0.05s' }} />
+        <path d="M 0 8 Q 30 40 50 20 Q 40 0 10 0 Z" fill="url(#wingGrad2)" className="animate-bounce" style={{ animationDelay: '0.15s' }} />
+        <circle cx="-2" cy="-3" r="2" fill="#1f2937" />
+        <circle cx="2" cy="-3" r="2" fill="#1f2937" />
+        <path d="M -3 2 Q 0 4 3 2" stroke="#1f2937" strokeWidth="1" fill="none" />
+      </g>
+    </svg>
+    <div className="absolute -bottom-2 -right-2 text-2xl">✨</div>
+  </div>
+)
+
 export function Onboarding({ onComplete }: { onComplete: () => void }) {
   const [step, setStep] = useState(1)
   const [mounted, setMounted] = useState(false)
@@ -32,8 +60,10 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
 
         <Card className="bg-white/80 backdrop-blur shadow-xl">
           <div className="p-8 space-y-6">
-            <div className="text-center">
-              <div className="text-6xl mb-6">🦋</div>
+            <div className="text-center flex justify-center">
+              <div className="mb-6">
+                <ButterflyMascot />
+              </div>
               
               {step === 1 && (
                 <div className="space-y-4 animate-in fade-in duration-500">
@@ -58,7 +88,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
                   </p>
                   <div className="pt-4 text-sm text-purple-600">
                     En 30 jours, tu ne changes pas qui tu es.<br />
-                    Tu redeviens qui tu étais censée être. 🦋
+                    Tu redeviens qui tu étais censée être.
                   </div>
                 </div>
               )}

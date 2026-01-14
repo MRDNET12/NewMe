@@ -5,6 +5,33 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from '@/components/ui/button'
 import { ChevronRight, Sparkles } from 'lucide-react'
 
+const ButterflyMascot = () => (
+  <div className="relative">
+    <svg width="80" height="80" viewBox="0 0 120 120" className="animate-pulse">
+      <defs>
+        <linearGradient id="wingGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style={{ stopColor: '#ec4899', stopOpacity: 1 }} />
+          <stop offset="100%" style={{ stopColor: '#a855f7', stopOpacity: 1 }} />
+        </linearGradient>
+        <linearGradient id="wingGrad2" x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" style={{ stopColor: '#f472b6', stopOpacity: 1 }} />
+          <stop offset="100%" style={{ stopColor: '#c084fc', stopOpacity: 1 }} />
+        </linearGradient>
+      </defs>
+      <g transform="translate(60, 60)">
+        <ellipse cx="0" cy="0" rx="8" ry="10" fill="#8b5cf6" />
+        <path d="M 0 -8 Q -30 -40 -50 -20 Q -40 0 -10 0 Z" fill="url(#wingGrad1)" className="animate-bounce" style={{ animationDelay: '0s' }} />
+        <path d="M 0 8 Q -30 40 -50 20 Q -40 0 -10 0 Z" fill="url(#wingGrad2)" className="animate-bounce" style={{ animationDelay: '0.1s' }} />
+        <path d="M 0 -8 Q 30 -40 50 -20 Q 40 0 10 0 Z" fill="url(#wingGrad1)" className="animate-bounce" style={{ animationDelay: '0.05s' }} />
+        <path d="M 0 8 Q 30 40 50 20 Q 40 0 10 0 Z" fill="url(#wingGrad2)" className="animate-bounce" style={{ animationDelay: '0.15s' }} />
+        <circle cx="-2" cy="-3" r="2" fill="#1f2937" />
+        <circle cx="2" cy="-3" r="2" fill="#1f2937" />
+        <path d="M -3 2 Q 0 4 3 2" stroke="#1f2937" strokeWidth="1" fill="none" />
+      </g>
+    </svg>
+  </div>
+)
+
 interface HabitCardProps {
   habit: Habit
   completed: boolean
@@ -83,7 +110,7 @@ export function HabitCard({ habit, completed, onToggle }: HabitCardProps) {
 
                 <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-xl p-6 border border-pink-100">
                   <div className="flex items-start gap-4">
-                    <div className="text-5xl">✨</div>
+                    <ButterflyMascot />
                     <div>
                       <div className="flex items-center gap-2 mb-2">
                         <div className="bg-pink-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
