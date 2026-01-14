@@ -1,65 +1,79 @@
-import Image from "next/image";
+'use client'
+
+import { useState } from 'react'
+import { DailyChecklist } from '@/components/daily-checklist'
+import { ProgressTracker } from '@/components/progress-tracker'
+import { MoodJournal } from '@/components/mood-journal'
+import { GloweeBadges } from '@/components/glowee-badges'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Sparkles, TrendingUp, Heart, Trophy } from 'lucide-react'
 
 export default function Home() {
+  const [activeTab, setActiveTab] = useState('daily')
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
+      <header className="bg-gradient-to-r from-pink-400 to-purple-500 text-white py-6 px-4 shadow-lg">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="text-4xl">✨</div>
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold">New Me</h1>
+              <p className="text-sm text-pink-100">Ton voyage vers la meilleure version de toi-même</p>
+            </div>
+          </div>
+          <div className="hidden md:flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full">
+            <span className="text-2xl">🦋</span>
+            <span className="text-sm font-medium">Glowee t'accompagne 💛</span>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+      </header>
+
+      <main className="max-w-7xl mx-auto px-4 py-8">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList className="grid w-full grid-cols-4 h-auto bg-white/80 backdrop-blur">
+            <TabsTrigger value="daily" className="flex flex-col gap-1 p-3 data-[state=active]:bg-pink-500 data-[state=active]:text-white">
+              <Sparkles className="w-5 h-5" />
+              <span className="text-xs">Aujourd'hui</span>
+            </TabsTrigger>
+            <TabsTrigger value="progress" className="flex flex-col gap-1 p-3 data-[state=active]:bg-purple-500 data-[state=active]:text-white">
+              <TrendingUp className="w-5 h-5" />
+              <span className="text-xs">Progression</span>
+            </TabsTrigger>
+            <TabsTrigger value="mood" className="flex flex-col gap-1 p-3 data-[state=active]:bg-pink-500 data-[state=active]:text-white">
+              <Heart className="w-5 h-5" />
+              <span className="text-xs">Journal</span>
+            </TabsTrigger>
+            <TabsTrigger value="badges" className="flex flex-col gap-1 p-3 data-[state=active]:bg-yellow-500 data-[state=active]:text-white">
+              <Trophy className="w-5 h-5" />
+              <span className="text-xs">Badges</span>
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="daily" className="space-y-6">
+            <DailyChecklist />
+          </TabsContent>
+
+          <TabsContent value="progress" className="space-y-6">
+            <ProgressTracker />
+          </TabsContent>
+
+          <TabsContent value="mood" className="space-y-6">
+            <MoodJournal />
+          </TabsContent>
+
+          <TabsContent value="badges" className="space-y-6">
+            <GloweeBadges />
+          </TabsContent>
+        </Tabs>
       </main>
+
+      <footer className="mt-16 py-8 text-center text-gray-500 text-sm">
+        <p>
+          New Me - En 30 jours, tu ne changes pas qui tu es. Tu redeviens qui tu étais censée être. 🦋
+        </p>
+        <p className="mt-2">✨ Glowee t'accompagne dans ta transformation ✨</p>
+      </footer>
     </div>
-  );
+  )
 }

@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌱 New Me
 
-## Getting Started
+Application de transformation holistique sur 30 jours pour devenir la meilleure version de soi-même, accompagnée par Glowee ✨
 
-First, run the development server:
+## 🚀 Démarrage rapide
 
 ```bash
+cd new-me
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+L'application sera disponible à [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📱 Fonctionnalités
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### ✅ Checklist quotidienne
+- 13 habitudes à suivre quotidiennement
+- Coche les habitudes complétées
+- Progression visuelle en temps réel
 
-## Learn More
+### 📊 Suivi sur 30 jours
+- Nombre de jours complétés
+- Total des habitudes accomplies
+- Jours parfaits (13/13 habitudes)
 
-To learn more about Next.js, take a look at the following resources:
+### 📝 Journal de ressentis
+- Note ton humeur (de fatiguée à glowing)
+- Écris tes pensées du jour
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 🏆 Badges & Encouragements
+- Débloque des badges en accomplissant tes objectifs
+- Glowee t'encourage avec des messages motivationnels
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 📖 Les 13 Piliers de Transformation
+1. Marcher 30 min par jour
+2. Glutamine le matin à jeun
+3. Lecture développement personnel
+4. Boire 2L d'eau par jour
+5. Brossage à sec
+6. Massage du visage
+7. Sport / Mouvement
+8. Protéines à chaque repas
+9. Skincare matin & soir
+10. Sérum cils
+11. Coiffures protectrices
+12. Crème après douche
+13. Se lever un peu plus tôt
 
-## Deploy on Vercel
+## 💾 Persistance des données
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Tous tes progrès sont sauvegardés dans le localStorage de ton navigateur.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🛠️ Technologies
+
+- Next.js 16 avec App Router
+- TypeScript
+- Tailwind CSS
+- shadcn/ui composants
+- Lucide React icônes
+
+## ✨ Message de Glowee
+
+> "En 30 jours, tu ne changes pas qui tu es. Tu redeviens qui tu étais censée être."
+
+New Me n'est pas une contrainte, c'est un rituel d'amour pour toi-même 🦋
