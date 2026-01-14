@@ -85,7 +85,6 @@ export function DailyChecklist() {
             habit={habit}
             completed={completedHabits.has(habit.id)}
             onToggle={() => toggleHabit(habit.id)}
-            showDetails={false}
           />
         ))}
       </div>
