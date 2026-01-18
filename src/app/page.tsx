@@ -459,8 +459,8 @@ export default function GlowUpChallengeApp() {
             </div>
 
             {/* Day Selector */}
-            <ScrollArea className="h-28 w-full">
-              <div className="flex gap-2 pb-4 px-1">
+            <div className="h-28 w-full overflow-x-auto overflow-y-hidden pb-2 scrollbar-visible">
+              <div className="flex gap-2 px-1">
                 {challengeDays.map((day) => {
                   const isLocked = !canAccessDay(day.day);
                   const isCompleted = challengeProgress.completedDays.includes(day.day);
@@ -490,7 +490,7 @@ export default function GlowUpChallengeApp() {
                   );
                 })}
               </div>
-            </ScrollArea>
+            </div>
 
             {/* Day Content */}
             {getCurrentDayData() && (

@@ -180,6 +180,31 @@
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-stone-400 dark:bg-stone-600;
   }
+
+  /* Force visible scrollbar */
+  .scrollbar-visible {
+    scrollbar-width: auto;
+    -ms-overflow-style: scrollbar;
+  }
+
+  .scrollbar-visible::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  .scrollbar-visible::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+  }
+
+  .scrollbar-visible::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+  }
+
+  .scrollbar-visible::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
 }
 
 /* Gradient text utility */
