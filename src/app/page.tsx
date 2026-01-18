@@ -459,8 +459,8 @@ export default function GlowUpChallengeApp() {
             </div>
 
             {/* Day Selector */}
-            <ScrollArea className="h-24 w-full">
-              <div className="flex gap-2 pb-4">
+            <ScrollArea className="h-28 w-full">
+              <div className="flex gap-2 pb-4 px-1">
                 {challengeDays.map((day) => {
                   const isLocked = !canAccessDay(day.day);
                   const isCompleted = challengeProgress.completedDays.includes(day.day);
@@ -471,7 +471,7 @@ export default function GlowUpChallengeApp() {
                       variant={currentDay === day.day ? 'default' : 'outline'}
                       size="sm"
                       disabled={isLocked}
-                      className={`min-w-12 relative ${
+                      className={`min-w-14 shrink-0 relative ${
                         currentDay === day.day
                           ? 'bg-rose-500 hover:bg-rose-600'
                           : isCompleted
@@ -495,53 +495,33 @@ export default function GlowUpChallengeApp() {
             {/* Day Content */}
             {getCurrentDayData() && (
               <Card className={`border-none shadow-lg ${theme === 'dark' ? 'bg-stone-900' : 'bg-white'}`}>
-                {!canAccessDay(currentDay) ? (
-                  // Jour verrouillé
-                  <CardContent className="p-12 text-center space-y-4">
-                    <div className="w-20 h-20 mx-auto rounded-full bg-stone-100 dark:bg-stone-800 flex items-center justify-center">
-                      <span className="text-4xl">🔒</span>
+                <CardHeader>
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <Badge className="bg-gradient-to-r from-rose-400 to-pink-400 mb-2">{t.challenge.week} {getCurrentDayData()?.week}</Badge>
+                      <CardTitle className="text-2xl mb-2">{getCurrentDayData()?.title}</CardTitle>
+                      <CardDescription className="text-sm">{getCurrentDayData()?.weekObjective}</CardDescription>
                     </div>
-                    <h3 className="text-xl font-bold">{t.challenge.lockedDay}</h3>
-                    <p className="text-stone-600 dark:text-stone-400">
-                      {t.challenge.completeCurrentDay}
-                    </p>
-                    <Button
-                      onClick={() => setCurrentDay(getCurrentUnlockedDay())}
-                      className="bg-gradient-to-r from-rose-400 via-pink-400 to-orange-300 hover:from-rose-500 hover:via-pink-500 hover:to-orange-400 text-white"
+                    <div
+                      className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                        challengeProgress.completedDays.includes(currentDay)
+                          ? 'bg-green-100 dark:bg-green-900'
+                          : 'bg-stone-100 dark:bg-stone-800'
+                      }`}
                     >
-                      {t.challenge.viewDay} {getCurrentUnlockedDay()}
-                    </Button>
-                  </CardContent>
-                ) : (
-                  // Jour accessible
-                  <>
-                    <CardHeader>
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <Badge className="bg-gradient-to-r from-rose-400 to-pink-400 mb-2">{t.challenge.week} {getCurrentDayData()?.week}</Badge>
-                          <CardTitle className="text-2xl mb-2">{getCurrentDayData()?.title}</CardTitle>
-                          <CardDescription className="text-sm">{getCurrentDayData()?.weekObjective}</CardDescription>
-                        </div>
-                        <div
-                          className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                            challengeProgress.completedDays.includes(currentDay)
-                              ? 'bg-green-100 dark:bg-green-900'
-                              : 'bg-stone-100 dark:bg-stone-800'
-                          }`}
-                        >
-                          {challengeProgress.completedDays.includes(currentDay) ? (
-                            <Check className="w-6 h-6 text-green-600 dark:text-green-400" />
-                          ) : (
-                            <span className="text-2xl">{currentDay}</span>
-                          )}
-                        </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                  {/* Description */}
-                  <div className={`p-4 rounded-xl ${theme === 'dark' ? 'bg-stone-800' : 'bg-stone-50'}`}>
-                    <p className="text-lg leading-relaxed">{getCurrentDayData()?.content}</p>
+                      {challengeProgress.completedDays.includes(currentDay) ? (
+                        <Check className="w-6 h-6 text-green-600 dark:text-green-400" />
+                      ) : (
+                        <span className="text-2xl">{currentDay}</span>
+                      )}
+                    </div>
                   </div>
+                </CardHeader>
+                <CardContent className="space-y-6">
+              {/* Description */}
+              <div className={`p-4 rounded-xl ${theme === 'dark' ? 'bg-stone-800' : 'bg-stone-50'}`}>
+                <p className="text-lg leading-relaxed">{getCurrentDayData()?.content}</p>
+              </div>
 
                   {/* Affirmation */}
                   <div className={`p-4 rounded-xl border-l-4 border-rose-400 ${theme === 'dark' ? 'bg-stone-800' : 'bg-rose-50'}`}>
@@ -624,8 +604,6 @@ export default function GlowUpChallengeApp() {
                     )}
                   </Button>
                 </CardContent>
-                  </>
-                )}
               </Card>
             )}
           </div>

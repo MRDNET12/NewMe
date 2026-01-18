@@ -259,32 +259,7 @@ export const useStore = create<AppState>()(
         });
       },
       canAccessDay: (day) => {
-        const { completedDays, startDate } = get().challengeProgress;
-
-        // Si pas de date de début, on peut accéder au jour 1 seulement
-        if (!startDate) return day === 1;
-
-        // Calculer le nombre de jours depuis le début
-        const start = new Date(startDate);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        start.setHours(0, 0, 0, 0);
-
-        const daysSinceStart = Math.floor((today.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-
-        // On peut accéder aux jours déjà complétés
-        if (completedDays.includes(day)) return true;
-
-        // On peut accéder au jour actuel si on a complété tous les jours précédents
-        if (day <= daysSinceStart + 1) {
-          // Vérifier que tous les jours précédents sont complétés
-          for (let i = 1; i < day; i++) {
-            if (!completedDays.includes(i)) return false;
-          }
-          return true;
-        }
-
-        return false;
+        return true;
       },
       getCurrentUnlockedDay: () => {
         const { completedDays, startDate } = get().challengeProgress;
